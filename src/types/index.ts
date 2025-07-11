@@ -23,10 +23,11 @@ export interface Client {
 
 export interface Reservation {
   id: string;
-  clientId: string;
-  vehicleId: string;
+  client: Client;
+  vehicule: Vehicle;
   dateDebut: Date;
   dateFin: Date;
   prixTotal: number;
-  statut: 'En cours' | 'Terminée' | 'Annulée';
+  statut: 'En attente' | 'Confirmée' | 'Annulée';
+  createdAt: Date;
 }
