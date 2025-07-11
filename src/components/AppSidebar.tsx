@@ -1,5 +1,5 @@
 
-import { Car, Users, BarChart3, Settings, Home } from "lucide-react";
+import { Car, Users, BarChart3, Settings, Home, Calendar } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -16,6 +16,7 @@ import {
 
 const navigationItems = [
   { title: "Dashboard", url: "/", icon: Home },
+  { title: "Réservations", url: "/reservations", icon: Calendar },
   { title: "Véhicules", url: "/vehicles", icon: Car },
   { title: "Clients", url: "/clients", icon: Users },
   { title: "Rapports", url: "/reports", icon: BarChart3 },
