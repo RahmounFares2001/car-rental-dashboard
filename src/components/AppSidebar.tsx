@@ -23,9 +23,10 @@ const navigationItems = [
 ];
 
 export function AppSidebar() {
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
   const location = useLocation();
   const currentPath = location.pathname;
+  const isCollapsed = state === "collapsed";
 
   const isActive = (path: string) => {
     if (path === '/') return currentPath === '/';
@@ -33,9 +34,9 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className={collapsed ? "w-14" : "w-64"} collapsible>
+    <Sidebar className={isCollapsed ? "w-14" : "w-64"} collapsible="icon">
       <SidebarHeader className="p-4">
-        {!collapsed && (
+        {!isCollapsed && (
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 premium-gradient rounded-lg flex items-center justify-center">
               <Car className="w-4 h-4 text-black" />
@@ -65,7 +66,7 @@ export function AppSidebar() {
                       }
                     >
                       <item.icon className="w-4 h-4" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!isCollapsed && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

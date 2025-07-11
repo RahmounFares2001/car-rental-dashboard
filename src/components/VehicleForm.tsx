@@ -37,6 +37,8 @@ const vehicleSchema = z.object({
   prixParJour: z.number().min(1, "Le prix doit être supérieur à 0"),
 });
 
+type VehicleFormData = z.infer<typeof vehicleSchema>;
+
 interface VehicleFormProps {
   open: boolean;
   onClose: () => void;
@@ -47,7 +49,7 @@ interface VehicleFormProps {
 export function VehicleForm({ open, onClose, onSubmit, vehicle }: VehicleFormProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(vehicle?.photo || null);
 
-  const form = useForm<z.infer<typeof vehicleSchema>>({
+  const form = useForm<VehicleFormData>({
     resolver: zodResolver(vehicleSchema),
     defaultValues: {
       marque: vehicle?.marque || "",
@@ -69,11 +71,17 @@ export function VehicleForm({ open, onClose, onSubmit, vehicle }: VehicleFormPro
     }
   };
 
-  const handleSubmit = (data: z.infer<typeof vehicleSchema>) => {
-    onSubmit({
-      ...data,
+  const handleSubmit = (data: VehicleFormData) => {
+    const vehicleData: Omit<Vehicle, 'id' | 'createdAt'> = {
+      marque: data.marque,
+      modele: data.modele,
+      type: data.type,
+      statut: data.statut,
+      prixParJour: data.prixParJour,
       photo: imagePreview || undefined,
-    });
+    };
+    
+    onSubmit(vehicleData);
     onClose();
     form.reset();
     setImagePreview(null);
