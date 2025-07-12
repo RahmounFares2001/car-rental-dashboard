@@ -1,3 +1,4 @@
+
 import { useState, useMemo } from "react";
 import { Search, Filter, Calendar, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { ReservationCard } from "@/components/ReservationCard";
 import { ReservationUpdateModal } from "@/components/ReservationUpdateModal";
+import { NewReservationModal } from "@/components/NewReservationModal";
 import { Reservation } from "@/types";
 
 // Données de démonstration
@@ -149,6 +151,7 @@ export default function Reservations() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isNewReservationModalOpen, setIsNewReservationModalOpen] = useState(false);
 
   const itemsPerPage = 10;
 
@@ -188,6 +191,10 @@ export default function Reservations() {
     );
   };
 
+  const handleNewReservation = (newReservation: Reservation) => {
+    setReservations(prev => [newReservation, ...prev]);
+  };
+
   const handleViewDetails = (reservation: Reservation) => {
     console.log("Voir détails réservation:", reservation);
     // Ici on pourrait ouvrir une modale avec tous les détails
@@ -203,7 +210,10 @@ export default function Reservations() {
             {filteredReservations.length} réservation{filteredReservations.length > 1 ? 's' : ''} au total
           </p>
         </div>
-        <Button className="premium-gradient text-black font-medium">
+        <Button 
+          className="premium-gradient text-black font-medium"
+          onClick={() => setIsNewReservationModalOpen(true)}
+        >
           <Plus className="w-4 h-4 mr-2" />
           Nouvelle réservation
         </Button>
@@ -300,6 +310,13 @@ export default function Reservations() {
           onUpdate={handleReservationUpdate}
         />
       )}
+
+      {/* Modal de nouvelle réservation */}
+      <NewReservationModal
+        isOpen={isNewReservationModalOpen}
+        onClose={() => setIsNewReservationModalOpen(false)}
+        onAdd={handleNewReservation}
+      />
     </div>
   );
 }
