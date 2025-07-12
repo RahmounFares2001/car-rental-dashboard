@@ -42,27 +42,27 @@ export function AppSidebar() {
             <div className="w-8 h-8 premium-gradient rounded-lg flex items-center justify-center">
               <Car className="w-4 h-4 text-black" />
             </div>
-            <h1 className="text-xl font-bold text-primary">LuxeRide</h1>
+            <h1 className="text-xl font-bold text-sidebar-foreground">LuxeRide</h1>
           </div>
         )}
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-sidebar-foreground/70">Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
                     <NavLink
                       to={item.url}
                       end={item.url === '/'}
                       className={({ isActive: active }) =>
-                        `flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${
+                        `flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 text-sidebar-foreground ${
                           active || isActive(item.url)
-                            ? "bg-primary text-primary-foreground font-medium"
-                            : "hover:bg-accent/50 text-sidebar-foreground"
+                            ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                            : "hover:bg-sidebar-accent/50"
                         }`
                       }
                     >

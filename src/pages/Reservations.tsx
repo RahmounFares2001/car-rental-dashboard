@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Search, Filter, Calendar, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ReservationCard } from "@/components/ReservationCard";
+import { ReservationUpdateModal } from "@/components/ReservationUpdateModal";
 import { Reservation } from "@/types";
 
 // Données de démonstration
@@ -147,6 +147,8 @@ export default function Reservations() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   const itemsPerPage = 10;
 
@@ -174,8 +176,16 @@ export default function Reservations() {
   const totalPages = Math.ceil(filteredReservations.length / itemsPerPage);
 
   const handleUpdateStatus = (reservation: Reservation) => {
-    console.log("Mettre à jour statut:", reservation);
-    // Ici on pourrait ouvrir une modale pour changer le statut
+    setSelectedReservation(reservation);
+    setIsUpdateModalOpen(true);
+  };
+
+  const handleReservationUpdate = (updatedReservation: Reservation) => {
+    setReservations(prev => 
+      prev.map(res => 
+        res.id === updatedReservation.id ? updatedReservation : res
+      )
+    );
   };
 
   const handleViewDetails = (reservation: Reservation) => {
@@ -276,6 +286,19 @@ export default function Reservations() {
             Suivant
           </Button>
         </div>
+      )}
+
+      {/* Modal de mise à jour */}
+      {selectedReservation && (
+        <ReservationUpdateModal
+          isOpen={isUpdateModalOpen}
+          onClose={() => {
+            setIsUpdateModalOpen(false);
+            setSelectedReservation(null);
+          }}
+          reservation={selectedReservation}
+          onUpdate={handleReservationUpdate}
+        />
       )}
     </div>
   );
