@@ -1,10 +1,10 @@
-
 import { useState, useMemo } from "react";
 import { Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ClientCard } from "@/components/ClientCard";
 import { Client } from "@/types";
+import { ClientDetailsModal } from "@/components/ClientDetailsModal";
 
 // Données de démonstration
 const mockClients: Client[] = [
@@ -94,6 +94,8 @@ export default function Clients() {
   const [clients, setClients] = useState<Client[]>(mockClients);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedClientForDetails, setSelectedClientForDetails] = useState<Client | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const itemsPerPage = 10;
 
@@ -121,7 +123,8 @@ export default function Clients() {
   };
 
   const handleViewDetails = (client: Client) => {
-    console.log("Voir détails client:", client);
+    setSelectedClientForDetails(client);
+    setIsDetailsModalOpen(true);
   };
 
   return (
@@ -202,6 +205,18 @@ export default function Clients() {
             Suivant
           </Button>
         </div>
+      )}
+
+      {/* Modal des détails du client */}
+      {selectedClientForDetails && (
+        <ClientDetailsModal
+          isOpen={isDetailsModalOpen}
+          onClose={() => {
+            setIsDetailsModalOpen(false);
+            setSelectedClientForDetails(null);
+          }}
+          client={selectedClientForDetails}
+        />
       )}
     </div>
   );

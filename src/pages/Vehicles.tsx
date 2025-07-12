@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Plus, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,6 +12,7 @@ import {
 import { VehicleCard } from "@/components/VehicleCard";
 import { VehicleForm } from "@/components/VehicleForm";
 import { Vehicle } from "@/types";
+import { VehicleDetailsModal } from "@/components/VehicleDetailsModal";
 
 // Données de démonstration
 const mockVehicles: Vehicle[] = [
@@ -80,6 +80,8 @@ export default function Vehicles() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingVehicle, setEditingVehicle] = useState<Vehicle | undefined>();
+  const [selectedVehicleForDetails, setSelectedVehicleForDetails] = useState<Vehicle | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const itemsPerPage = 12;
 
@@ -130,6 +132,11 @@ export default function Vehicles() {
   const closeForm = () => {
     setIsFormOpen(false);
     setEditingVehicle(undefined);
+  };
+
+  const handleViewDetails = (vehicle: Vehicle) => {
+    setSelectedVehicleForDetails(vehicle);
+    setIsDetailsModalOpen(true);
   };
 
   return (
@@ -196,7 +203,7 @@ export default function Vehicles() {
             key={vehicle.id}
             vehicle={vehicle}
             onEdit={openEditForm}
-            onViewDetails={(v) => console.log('Voir détails:', v)}
+            onViewDetails={handleViewDetails}
           />
         ))}
       </div>
@@ -240,6 +247,18 @@ export default function Vehicles() {
         onSubmit={editingVehicle ? handleEditVehicle : handleAddVehicle}
         vehicle={editingVehicle}
       />
+
+      {/* Modal des détails du véhicule */}
+      {selectedVehicleForDetails && (
+        <VehicleDetailsModal
+          isOpen={isDetailsModalOpen}
+          onClose={() => {
+            setIsDetailsModalOpen(false);
+            setSelectedVehicleForDetails(null);
+          }}
+          vehicle={selectedVehicleForDetails}
+        />
+      )}
     </div>
   );
 }

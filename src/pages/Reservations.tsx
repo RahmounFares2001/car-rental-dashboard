@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import { Search, Filter, Calendar, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +13,7 @@ import { ReservationCard } from "@/components/ReservationCard";
 import { ReservationUpdateModal } from "@/components/ReservationUpdateModal";
 import { NewReservationModal } from "@/components/NewReservationModal";
 import { Reservation } from "@/types";
+import { ReservationDetailsModal } from "@/components/ReservationDetailsModal";
 
 // Données de démonstration
 const mockReservations: Reservation[] = [
@@ -152,6 +152,8 @@ export default function Reservations() {
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isNewReservationModalOpen, setIsNewReservationModalOpen] = useState(false);
+  const [selectedReservationForDetails, setSelectedReservationForDetails] = useState<Reservation | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const itemsPerPage = 10;
 
@@ -196,8 +198,8 @@ export default function Reservations() {
   };
 
   const handleViewDetails = (reservation: Reservation) => {
-    console.log("Voir détails réservation:", reservation);
-    // Ici on pourrait ouvrir une modale avec tous les détails
+    setSelectedReservationForDetails(reservation);
+    setIsDetailsModalOpen(true);
   };
 
   return (
@@ -317,6 +319,18 @@ export default function Reservations() {
         onClose={() => setIsNewReservationModalOpen(false)}
         onAdd={handleNewReservation}
       />
+
+      {/* Modal des détails de réservation */}
+      {selectedReservationForDetails && (
+        <ReservationDetailsModal
+          isOpen={isDetailsModalOpen}
+          onClose={() => {
+            setIsDetailsModalOpen(false);
+            setSelectedReservationForDetails(null);
+          }}
+          reservation={selectedReservationForDetails}
+        />
+      )}
     </div>
   );
 }
